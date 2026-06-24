@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>365 Days — Self Improvement</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0f;
+    --bg2: #141417;
+    --bg3: #1c1c21;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0eeff;
+    --text2: #9996b3;
+    --text3: #5a5870;
+    --accent: #7F77DD;
+    --accent-soft: rgba(127,119,221,0.12);
+    --accent-dark: #3C3489;
+    --gold: #EF9F27;
+    --gold-soft: rgba(239,159,39,0.12);
+    --danger: #E24B4A;
+    --danger-soft: rgba(226,75,74,0.12);
+    --success: #1D9E75;
+    --success-soft: rgba(29,158,117,0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+  body { max-width: 520px; margin: 0 auto; padding: 0 0 4rem; }
+
+  /* Hero */
+  .hero { text-align: center; padding: 3rem 1rem 2rem; position: relative; }
+  .hero::after { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 200px; height: 200px; background: radial-gradient(circle, rgba(127,119,221,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text3); margin-bottom: 12px; }
+  .hero-num { font-size: 96px; font-weight: 700; line-height: 1; color: var(--accent); letter-spacing: -4px; }
+  .hero-of { font-size: 14px; color: var(--text3); margin-top: 4px; }
+  .streak-badge { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; background: var(--gold-soft); border: 0.5px solid rgba(239,159,39,0.3); color: var(--gold); font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 999px; }
+
+  /* Quote */
+  .quote-box { margin: 0 1rem 1.5rem; padding: 1.25rem 1.5rem; background: var(--bg2); border-radius: var(--radius); border-left: 3px solid var(--accent); }
+  .quote-text { font-size: 14px; line-height: 1.8; color: var(--text2); font-style: italic; }
+  .quote-author { font-size: 12px; color: var(--text3); margin-top: 8px; }
+
+  /* Section title */
+  .section-title { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); padding: 0 1rem; margin-bottom: 10px; }
+
+  /* Missed banner */
+  .missed-banner { margin: 0 1rem 1rem; padding: 12px 14px; background: var(--danger-soft); border-radius: var(--radius-sm); border: 0.5px solid rgba(226,75,74,0.3); display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: #f0918e; line-height: 1.6; }
+  .missed-banner i { margin-top: 1px; font-size: 16px; flex-shrink: 0; }
+
+  /* Questions */
+  .questions { padding: 0 1rem; display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+  .q-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.25rem; transition: border-color 0.2s; }
+  .q-card.answered { border-color: rgba(127,119,221,0.3); }
+  .q-num { font-size: 11px; color: var(--text3); margin-bottom: 6px; letter-spacing: 0.5px; }
+  .q-text { font-size: 15px; color: var(--text); margin-bottom: 14px; line-height: 1.55; font-weight: 500; }
+  .q-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .q-btn { border: 0.5px solid var(--border2); background: var(--bg3); color: var(--text2); font-size: 13px; padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .q-btn:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .q-btn.sel-yes { background: var(--success-soft); border-color: rgba(29,158,117,0.5); color: #4ecfa8; }
+  .q-btn.sel-no { background: var(--danger-soft); border-color: rgba(226,75,74,0.5); color: #f0918e; }
+  .q-btn.sel-mid { background: var(--gold-soft); border-color: rgba(239,159,39,0.5); color: var(--gold); }
+  .q-note { width: 100%; margin-top: 10px; font-size: 13px; padding: 10px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: var(--bg3); color: var(--text); resize: none; min-height: 64px; display: none; font-family: inherit; line-height: 1.6; }
+  .q-note::placeholder { color: var(--text3); }
+  .q-note.visible { display: block; }
+  .q-note:focus { outline: none; border-color: var(--accent); }
+  .q-text-input { width: 100%; font-size: 13px; padding: 10px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: var(--bg3); color: var(--text); font-family: inherit; line-height: 1.6; }
+  .q-text-input::placeholder { color: var(--text3); }
+  .q-text-input:focus { outline: none; border-color: var(--accent); }
+
+  /* Submit */
+  .submit-wrap { padding: 0 1rem 1.5rem; }
+  .submit-btn { width: 100%; padding: 15px; background: var(--accent); color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: inherit; letter-spacing: 0.3px; }
+  .submit-btn:hover:not(:disabled) { background: #6860cc; }
+  .submit-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .progress-hint { text-align: center; font-size: 12px; color: var(--text3); margin-top: 8px; }
+
+  /* Done state */
+  .done-area { text-align: center; padding: 2.5rem 1rem; }
+  .done-icon { font-size: 56px; color: var(--success); margin-bottom: 16px; }
+  .done-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .done-sub { font-size: 14px; color: var(--text2); line-height: 1.7; }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 1rem 1.5rem; }
+  .stat-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; text-align: center; }
+  .stat-num { font-size: 26px; font-weight: 700; }
+  .stat-num.c-green { color: var(--success); }
+  .stat-num.c-amber { color: var(--gold); }
+  .stat-num.c-purple { color: var(--accent); }
+  .stat-lbl { font-size: 11px; color: var(--text3); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* Grid */
+  .grid-wrap { padding: 0 1rem 2rem; }
+  .grid-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .grid-legend { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--text3); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+  .day-grid { display: grid; grid-template-columns: repeat(26, 1fr); gap: 3px; }
+  .day-cell { width: 100%; aspect-ratio: 1; border-radius: 2px; background: var(--bg3); cursor: default; border: 0.5px solid var(--border); transition: transform 0.1s; }
+  .day-cell:hover { transform: scale(1.5); z-index: 10; position: relative; }
+  .day-cell.done { background: var(--accent); border-color: var(--accent-dark); }
+  .day-cell.missed { background: rgba(226,75,74,0.5); border-color: rgba(226,75,74,0.3); }
+  .day-cell.today { border: 1.5px solid var(--gold); }
+
+  /* Footer */
+  .footer { text-align: center; padding: 1rem; font-size: 12px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="hero">
+    <div class="hero-eyebrow">Your journey</div>
+    <div class="hero-num" id="dayNum">1</div>
+    <div class="hero-of">of 365 days</div>
+    <div class="streak-badge"><i class="ti ti-flame"></i> <span id="streakText">0 day streak</span></div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-text" id="quoteText"></div>
+    <div class="quote-author" id="quoteAuthor"></div>
+  </div>
+
+  <div id="missedBanner" class="missed-banner" style="display:none;">
+    <i class="ti ti-alert-triangle"></i>
+    <span id="missedMsg"></span>
+  </div>
+
+  <div id="checkInArea">
+    <div class="section-title">Today's check-in — Day <span id="dayLabel">1</span></div>
+    <div class="questions" id="questionsContainer"></div>
+    <div class="submit-wrap">
+      <button class="submit-btn" id="submitBtn" disabled onclick="submitDay()">
+        Complete Day <span id="submitDayNum">1</span>
+      </button>
+      <div class="progress-hint" id="progressHint">Answer all questions to complete</div>
+    </div>
+  </div>
+
+  <div id="doneArea" class="done-area" style="display:none;">
+    <div class="done-icon"><i class="ti ti-circle-check"></i></div>
+    <div class="done-title" id="doneTitle">Day complete.</div>
+    <div class="done-sub">Come back tomorrow.<br>Discipline is built one day at a time.</div>
+  </div>
+
+  <div style="padding: 0 1rem 0.5rem; margin-top: 0.5rem;">
+    <div class="section-title" style="padding:0; margin-bottom:12px;">Your progress</div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num c-green" id="statDone">0</div><div class="stat-lbl">Done</div></div>
+    <div class="stat-card"><div class="stat-num c-amber" id="statMissed">0</div><div class="stat-lbl">Missed</div></div>
+    <div class="stat-card"><div class="stat-num c-purple" id="statBest">0</div><div class="stat-lbl">Best streak</div></div>
+  </div>
+
+  <div class="grid-wrap">
+    <div class="grid-header">
+      <div class="section-title" style="padding:0; margin:0;">365 days</div>
+      <div class="grid-legend">
+        <span><span class="legend-dot" style="background:var(--accent);"></span> done</span>
+        <span><span class="legend-dot" style="background:rgba(226,75,74,0.5);"></span> missed</span>
+        <span><span class="legend-dot" style="border:1.5px solid var(--gold); background:transparent;"></span> today</span>
+      </div>
+    </div>
+    <div class="day-grid" id="dayGrid"></div>
+  </div>
+
+  <div class="footer">Built for you. One day at a time. 🔒</div>
+</div>
+
+<script>
+const QUESTIONS = [
+  { id:'lust',       text:'Did you stay free from lust, porn, or anything that pulls your focus down?',      type:'yesno',  note:true  },
+  { id:'focus',      text:'Did you stay focused today — no mindless scrolling or wasted hours?',             type:'yesno',  note:false },
+  { id:'anger',      text:'Did you keep your anger in check and respond with patience?',                     type:'yesno',  note:false },
+  { id:'decision',   text:'Did you make at least one good, intentional decision today?',                     type:'yesno',  note:false },
+  { id:'discipline', text:'Did you do the thing you planned — even when you didn\'t want to?',               type:'yesno',  note:false },
+  { id:'prayer',     text:'Did you connect spiritually — prayer, gratitude, or deep reflection?',            type:'yesno',  note:false },
+  { id:'body',       text:'Did you move your body today — walk, workout, or stretch?',                       type:'yesno',  note:false },
+  { id:'learn',      text:'Did you read, study, or improve your mind today?',                                type:'yesno',  note:false },
+  { id:'energy',     text:'How was your overall mental state and energy today?',                             type:'three',  labels:['Strong','Okay','Low'], note:true },
+  { id:'tomorrow',   text:'What is the one most important thing you must do tomorrow?',                      type:'text'                                    },
+];
+
+const QUOTES = [
+  { text:'Discipline is the bridge between goals and accomplishment.', author:'Jim Rohn' },
+  { text:'Do not pray for an easy life. Pray for the strength to endure a difficult one.', author:'Bruce Lee' },
+  { text:'You will never always be motivated. You have to learn to be disciplined.', author:'Unknown' },
+  { text:'Hard choices, easy life. Easy choices, hard life.', author:'Jerzy Gregorek' },
+  { text:'Every morning you have two choices: continue to sleep with your dreams, or wake up and chase them.', author:'Unknown' },
+  { text:'He who has a why to live can bear almost any how.', author:'Nietzsche' },
+  { text:'Control your mind or it will control you.', author:'Unknown' },
+  { text:'Your future self is watching you right now through your memories.', author:'Aubrey de Grey' },
+  { text:'Pain is temporary. Regret is forever.', author:'Unknown' },
+  { text:'The man who moves a mountain begins by carrying away small stones.', author:'Confucius' },
+  { text:'Fall seven times, stand up eight.', author:'Japanese Proverb' },
+  { text:'You don\'t rise to the level of your goals. You fall to the level of your systems.', author:'James Clear' },
+  { text:'Focus on the step in front of you, not the whole staircase.', author:'Unknown' },
+  { text:'Whoever fights monsters should see to it that he does not become a monster.', author:'Nietzsche' },
+  { text:'The successful warrior is the average man, with laser-like focus.', author:'Bruce Lee' },
+  { text:'Don\'t count the days, make the days count.', author:'Muhammad Ali' },
+  { text:'We suffer more in imagination than in reality.', author:'Seneca' },
+  { text:'You have power over your mind, not outside events. Realize this and you will find strength.', author:'Marcus Aurelius' },
+  { text:'Waste no more time arguing about what a good man should be. Be one.', author:'Marcus Aurelius' },
+  { text:'It does not matter how slowly you go as long as you do not stop.', author:'Confucius' },
+];
+
+function getStorage() {
+  try {
+    const raw = localStorage.getItem('sj365_v2');
+    return raw ? JSON.parse(raw) : { startDate: null, days: {}, bestStreak: 0 };
+  } catch(e) { return { startDate: null, days: {}, bestStreak: 0 }; }
+}
+function saveStorage(data) {
+  try { localStorage.setItem('sj365_v2', JSON.stringify(data)); } catch(e) {}
+}
+
+function getTodayKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+}
+
+function getDayNumber(startDate) {
+  const start = new Date(startDate); start.setHours(0,0,0,0);
+  const now = new Date(); now.setHours(0,0,0,0);
+  return Math.min(Math.floor((now - start) / 86400000) + 1, 365);
+}
+
+function getDateKey(startDate, dayIndex) {
+  const d = new Date(startDate);
+  d.setDate(d.getDate() + dayIndex);
+  return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+}
+
+let state = getStorage();
+if (!state.startDate) {
+  state.startDate = new Date().toISOString().split('T')[0];
+  saveStorage(state);
+}
+
+const todayKey = getTodayKey();
+const currentDay = getDayNumber(state.startDate);
+const answers = {};
+
+function calcStats() {
+  let done = 0, missed = 0, curStreak = 0, best = state.bestStreak || 0;
+  for (let i = 0; i < currentDay; i++) {
+    const k = getDateKey(state.startDate, i);
+    if (state.days[k] && state.days[k].done) {
+      done++; curStreak++;
+      if (curStreak > best) best = curStreak;
+    } else if (i < currentDay - 1) {
+      missed++; curStreak = 0;
+    }
+  }
+  if (!(state.days[todayKey] && state.days[todayKey].done)) curStreak = 0;
+  document.getElementById('statDone').textContent = done;
+  document.getElementById('statMissed').textContent = missed;
+  document.getElementById('statBest').textContent = best;
+  document.getElementById('dayNum').textContent = currentDay;
+  document.getElementById('dayLabel').textContent = currentDay;
+  document.getElementById('submitDayNum').textContent = currentDay;
+  document.getElementById('streakText').textContent = curStreak + ' day streak';
+  return curStreak;
+}
+
+function buildGrid() {
+  const grid = document.getElementById('dayGrid');
+  grid.innerHTML = '';
+  for (let i = 0; i < 365; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    const k = getDateKey(state.startDate, i);
+    if (state.days[k] && state.days[k].done) cell.classList.add('done');
+    else if (i < currentDay - 1) cell.classList.add('missed');
+    if (i === currentDay - 1) cell.classList.add('today');
+    cell.title = 'Day ' + (i+1);
+    grid.appendChild(cell);
+  }
+}
+
+function showMissed() {
+  const missed = [];
+  for (let i = 0; i < currentDay - 1; i++) {
+    const k = getDateKey(state.startDate, i);
+    if (!state.days[k] || !state.days[k].done) missed.push(i+1);
+  }
+  if (missed.length > 0) {
+    const b = document.getElementById('missedBanner');
+    b.style.display = 'flex';
+    const shown = missed.slice(-3).map(d => 'Day ' + d).join(', ');
+    const extra = missed.length > 3 ? ' and ' + (missed.length - 3) + ' more' : '';
+    document.getElementById('missedMsg').textContent =
+      'You missed ' + missed.length + ' day' + (missed.length > 1 ? 's' : '') + ' (' + shown + extra + '). Don\'t break the chain again — today is a fresh start.';
+  }
+}
+
+function setQuote() {
+  const q = QUOTES[currentDay % QUOTES.length];
+  document.getElementById('quoteText').textContent = q.text;
+  document.getElementById('quoteAuthor').textContent = '— ' + q.author;
+}
+
+function buildQuestions() {
+  const container = document.getElementById('questionsContainer');
+  container.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = 'card_' + q.id;
+
+    const num = document.createElement('div');
+    num.className = 'q-num';
+    num.textContent = (i+1) + ' / ' + QUESTIONS.length;
+
+    const text = document.createElement('div');
+    text.className = 'q-text';
+    text.textContent = q.text;
+
+    const opts = document.createElement('div');
+    opts.className = 'q-options';
+    opts.id = 'opts_' + q.id;
+
+    card.appendChild(num);
+    card.appendChild(text);
+    card.appendChild(opts);
+
+    if (q.type === 'yesno') {
+      [['yes','Yes — I did'], ['no','No — I didn\'t']].forEach(([val, lbl]) => {
+        const b = document.createElement('button');
+        b.className = 'q-btn'; b.textContent = lbl;
+        b.onclick = () => selectOpt(q.id, val, b, q.note);
+        opts.appendChild(b);
+      });
+      if (q.note) {
+        const ta = document.createElement('textarea');
+        ta.className = 'q-note'; ta.id = 'note_' + q.id;
+        ta.placeholder = 'What happened? Be honest with yourself...';
+        card.appendChild(ta);
+      }
+    } else if (q.type === 'three') {
+      (q.labels).forEach((lbl, li) => {
+        const vals = ['yes','mid','no'];
+        const b = document.createElement('button');
+        b.className = 'q-btn'; b.textContent = lbl;
+        b.onclick = () => selectOpt(q.id, vals[li], b, q.note);
+        opts.appendChild(b);
+      });
+      if (q.note) {
+        const ta = document.createElement('textarea');
+        ta.className = 'q-note'; ta.id = 'note_' + q.id;
+        ta.placeholder = 'What affected your energy today?';
+        card.appendChild(ta);
+      }
+    } else if (q.type === 'text') {
+      const inp = document.createElement('input');
+      inp.className = 'q-text-input'; inp.type = 'text';
+      inp.placeholder = 'Write it here — commit to it.';
+      inp.oninput = () => {
+        answers[q.id] = inp.value.trim() ? 'done' : null;
+        updateSubmit();
+      };
+      opts.appendChild(inp);
+    }
+
+    container.appendChild(card);
+  });
+}
+
+function selectOpt(qid, val, btn, hasNote) {
+  answers[qid] = val;
+  const opts = document.getElementById('opts_' + qid);
+  opts.querySelectorAll('.q-btn').forEach(b => b.classList.remove('sel-yes','sel-no','sel-mid'));
+  if (val === 'yes') btn.classList.add('sel-yes');
+  else if (val === 'no') btn.classList.add('sel-no');
+  else btn.classList.add('sel-mid');
+  if (hasNote) {
+    const note = document.getElementById('note_' + qid);
+    if (note) note.classList.toggle('visible', val === 'no' || val === 'mid');
+  }
+  document.getElementById('card_' + qid).classList.add('answered');
+  updateSubmit();
+}
+
+function updateSubmit() {
+  const answered = QUESTIONS.filter(q => answers[q.id]).length;
+  const total = QUESTIONS.length;
+  const allDone = answered === total;
+  document.getElementById('submitBtn').disabled = !allDone;
+  document.getElementById('progressHint').textContent = allDone
+    ? 'All done — tap to save your day.'
+    : answered + ' of ' + total + ' answered';
+}
+
+function submitDay() {
+  const dayData = { done: true, ts: Date.now(), day: currentDay, answers: {} };
+  QUESTIONS.forEach(q => {
+    dayData.answers[q.id] = answers[q.id] || null;
+    const note = document.getElementById('note_' + q.id);
+    if (note) dayData.answers[q.id + '_note'] = note.value.trim();
+    const inp = document.querySelector('.q-text-input');
+    if (q.type === 'text' && inp) dayData.answers[q.id + '_text'] = inp.value.trim();
+  });
+  state.days[todayKey] = dayData;
+  const streak = calcStats();
+  if (streak > (state.bestStreak || 0)) state.bestStreak = streak;
+  saveStorage(state);
+  document.getElementById('checkInArea').style.display = 'none';
+  document.getElementById('doneArea').style.display = 'block';
+  document.getElementById('doneTitle').textContent = 'Day ' + currentDay + ' complete.';
+  calcStats();
+  buildGrid();
+}
+
+setQuote();
+const alreadyDone = state.days[todayKey] && state.days[todayKey].done;
+if (alreadyDone) {
+  document.getElementById('checkInArea').style.display = 'none';
+  document.getElementById('doneArea').style.display = 'block';
+  document.getElementById('doneTitle').textContent = 'Day ' + currentDay + ' already done.';
+}
+showMissed();
+calcStats();
+buildGrid();
+if (!alreadyDone) buildQuestions();
+</script>
+</body>
+</html>
